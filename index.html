@@ -587,6 +587,8 @@ const OPS_INFO = {
   order:["ORDER ARRIVES","Every order enters through one door: a click. Panels ship complete chip sets (P2); silence is never consent (P7)."],
   refused:["⛔ REFUSED","A typo is not an order. Illegal decisions are refused, ledgered (REFUSED) and blackboarded — the Decision Tree Court's critical kill (was: fell through to APPROVE)."],
   legal:["LEGAL ORDER?","The decision-tree audit: only approve / skip / abort pass. Everything else hits the REFUSED branch."],
+  flowstart:["🧭 FLOWCHART","The campaign in flowchart grammar: rectangles = work, diamonds = your decisions, red = refusal paths. One order in, one sealed verdict out."],
+  archview:["🕸️ ARCHITECTURE","Three planes: COMMAND decides, EXECUTION fights, DATA remembers. Gold = orders, green = evidence, dashed = the chronicle."],
   plan:["⛔ PLAN GATE","First of 5 gates. APPROVE opens the pipeline · SKIP advances honestly (ledgered) · ABORT ends the mission (double-click, P3)."],
   approve:["✅ APPROVE","One click executes the guarded step — then the gate advances. Bundles confirm all at once (Answer 4)."],
   skip:["⏭️ SKIP","Marks the step SKIPPED and advances. On the plan gate it advances too — and says there was no step to skip."],
@@ -606,6 +608,84 @@ function opsNode(x,y,w,h,label,color,info,fs,live){
 function opsEdge(x1,y1,x2,y2,color,dash){
   return "<path d='M"+x1+" "+y1+" L"+x2+" "+y2+"' stroke='"+(color||"var(--dim)")+"' stroke-width='1.6' fill='none'"+(dash?" stroke-dasharray='5,4'":"")+" marker-end='url(#arr)'/>";
 }
+function opsFlow(){
+  const box=(x,y,w,h,t,sub,c,key,shape)=>"<g class='army-rank' style='cursor:pointer' onclick=\"opInfo('"+key+"')\">"+
+    "<rect x='"+x+"' y='"+y+"' width='"+w+"' height='"+h+"' rx='"+(shape==="d"?24:(shape==="p"?20:10))+"' fill='var(--chip)' stroke='"+c+"' stroke-width='2'/>"+
+    "<text x='"+(x+w/2)+"' y='"+(y+h/2-(sub?6:0))+"' text-anchor='middle' fill='var(--ink)' font-size='12.5'>"+t+"</text>"+
+    (sub?"<text x='"+(x+w/2)+"' y='"+(y+h/2+12)+"' text-anchor='middle' fill='var(--dim)' font-size='10'>"+sub+"</text>":"")+"</g>";
+  const lbl=(x,y,t,c)=>"<text x='"+x+"' y='"+y+"' fill='"+c+"' font-size='10'>"+t+"</text>";
+  const v=(x,y1,y2,c)=>"<path d='M"+x+" "+y1+" L"+x+" "+y2+"' stroke='"+c+"' stroke-width='1.6' marker-end='url(#arr)'/>";
+  const G="#f0c75e",GR="#3fb950",R="#f85149",A="#d29922",B="#58a6ff";
+  let s="<svg viewBox='0 0 940 590' style='width:100%;height:auto'>"+
+    "<defs><marker id='arr' markerWidth='8' markerHeight='8' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6' fill='none' stroke='var(--dim)' stroke-width='1.4'/></marker></defs>";
+  s+=box(360,14,220,40,"⬭ 🎖️ ORDER — one click","",G,"order","p");
+  s+=v(470,54,80,G); s+=lbl(500,72,"gold = orders ↓",G);
+  s+=box(360,84,220,40,"▭ LAW 10 · pick a size","⚡ quick · 🎯 standard · 🔬 deep",B,"steps");
+  s+=v(470,124,152,B);
+  s+=box(410,156,120,50,"◇ GATE 1","plan? · 5 gates total",G,"plan","d");
+  s+=lbl(545,170,"APPROVE ↓",GR); s+=lbl(545,182,"SKIP ⏭ →",A); s+=lbl(430,226,"⛔ ABORT (double-click) ↓",R);
+  s+=box(660,158,180,38,"⏭ honest skip — ledgered","never silent (P7)",A,"run");
+  s+="<path d='M530 181 L660 177' stroke='"+A+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+="<path d='M470 206 L470 236' stroke='"+A+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+="<path d='M750 196 L750 236' stroke='"+A+"' stroke-width='1.4'/><path d='M750 236 L584 254' stroke='"+A+"' stroke-width='1.4'/>";
+  s+=box(360,240,220,44,"⚔️ THE PIPELINE","research → analyze → code → critic",GR,"run");
+  s+=v(470,284,308,GR); s+=lbl(500,300,"evidence ↑",GR);
+  s+=box(660,240,180,42,"🧪 deep adds","UX auto-audit (WCAG)",B,"verdict");
+  s+="<path d='M580 261 L660 261' stroke='"+B+"' stroke-width='1.4' stroke-dasharray='4 3' marker-end='url(#arr)'/>";
+  s+=box(410,312,120,50,"◇ CRITIC","5 checks — pass?",G,"verdict","d");
+  s+=lbl(545,326,"FAIL →",R);
+  s+=box(660,312,180,42,"⛔ REFUSED — hard stop","verdict kept · damage none",R,"refused");
+  s+="<path d='M530 337 L660 333' stroke='"+R+"' stroke-width='1.6' marker-end='url(#arr)'/>";
+  s+=v(470,362,394,GR);
+  s+=box(360,398,220,42,"🏅 VERDICT — PASS 5/5","ledgered · blackboarded",GR,"done");
+  s+=v(470,440,472,B);
+  s+=box(360,476,220,42,"📦 ARTIFACT + POSTER","advised, never applied (Law 9)",B,"done");
+  s+=v(470,518,542,B);
+  s+=box(360,546,220,34,"⬭ END — session sealed","P10: 3 next steps ship",G,"done","p");
+  s+="<text x='20' y='580' fill='var(--dim)' font-size='11'>grammar: ▭ work · ◇ decision · ⬭ start/end — 8 mission files walked this exact chart; every PASS = every gate</text>";
+  return s+"</svg>";
+}
+function opsArch(){
+  const box=(x,y,w,h,t,sub,c,key)=>"<g class='army-rank' style='cursor:pointer' onclick=\"opInfo('"+key+"')\">"+
+    "<rect x='"+x+"' y='"+y+"' width='"+w+"' height='"+h+"' rx='10' fill='var(--chip)' stroke='"+c+"' stroke-width='2'/>"+
+    "<text x='"+(x+w/2)+"' y='"+(y+h/2-(sub?6:0))+"' text-anchor='middle' fill='var(--ink)' font-size='12'>"+t+"</text>"+
+    (sub?"<text x='"+(x+w/2)+"' y='"+(y+h/2+12)+"' text-anchor='middle' fill='var(--dim)' font-size='9.5'>"+sub+"</text>":"")+"</g>";
+  const plane=(y,h,t,c)=>"<rect x='12' y='"+y+"' width='916' height='"+h+"' rx='14' fill='none' stroke='"+c+"' stroke-width='1' stroke-dasharray='6 4' opacity='.65'/>"+
+    "<text x='24' y='"+(y+15)+"' fill='"+c+"' font-size='10'>"+t+"</text>";
+  const G="#f0c75e",GR="#3fb950",R="#f85149",B="#58a6ff",A="#d29922",D="#8b98a5";
+  let s="<svg viewBox='0 0 940 620' style='width:100%;height:auto'>"+
+    "<defs><marker id='arr' markerWidth='8' markerHeight='8' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6' fill='none' stroke='var(--dim)' stroke-width='1.4'/></marker></defs>";
+  s+=plane(40,74,"COMMAND PLANE — decides & polices",G);
+  s+=plane(126,208,"EXECUTION PLANE — the four arms fight",GR);
+  s+=plane(346,150,"DATA PLANE — remembers everything",B);
+  s+=box(390,8,160,26,"🎖️ COMMANDER — one click","","",G,"order");
+  s+="<path d='M470 34 L470 60' stroke='"+G+"' stroke-width='2' marker-end='url(#arr)'/>";
+  s+=box(40,64,200,44,"🎖️ ORCHESTRATOR","control · marshals the arms",G,"order");
+  s+=box(258,64,200,44,"🛡️ GUARDIANS","policy · protocol v1.4 · drills",G,"legal");
+  s+=box(476,64,200,44,"⚖️ LAW CLERKS","12-law automated audits",G,"refused");
+  s+=box(694,64,222,44,"👁️ CHRONICLERS","log everything · adapt comms",G,"order");
+  s+="<path d='M470 108 L470 146' stroke='"+G+"' stroke-width='2' marker-end='url(#arr)'/>";
+  s+=box(40,152,876,40,"⚔️ FIRST ARM — THE LINE:  🔍 Researcher → 🧠 Analyst → 💻 Coder → ✖️ Critic → 🧪 Simulation","fights the missions, in this order, every time",GR,"run");
+  s+=box(40,200,424,44,"🛡️ SECOND ARM — THE WALL","Red Cell · Security · Quality · Accessibility · Memory Wardens",R,"refused");
+  s+=box(492,200,424,44,"🗺️ THIRD ARM — MAPMAKERS","Flowchart · Decision Tree · Comms Guard · Metrics · Tempo",B,"steps");
+  s+=box(40,252,424,44,"🔧 FOURTH ARM — ARMORY","Designum · Dimension Guild · Style Lab · Forge · Print Press",A,"verdict");
+  s+=box(492,252,424,44,"🚩 RESERVE CORPS — 20 woken","10 delivered with evidence (A) · 10 standing by (B)",D,"reserve");
+  s+="<path d='M470 334 L470 366' stroke='"+GR+"' stroke-width='2' marker-end='url(#arr)'/>";
+  s+=box(40,372,210,56,"📚 ENGINE BOOKS","39 units · 427 agents · statuses",B,"done");
+  s+=box(266,372,210,56,"📒 LEDGER","94 entries · seq monotonic",B,"done");
+  s+=box(492,372,210,56,"🗂️ COMMANDER LOG","click-sourced · cap 400",B,"order");
+  s+=box(718,372,226,56,"💾 DEVICE STORES","rv_* caps 30/200/100 · wipe-all",B,"done");
+  s+="<path d='M145 334 L145 370' stroke='"+GR+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+="<path d='M371 334 L371 370' stroke='"+GR+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+="<path d='M597 334 L597 370' stroke='"+A+"' stroke-width='1.4' stroke-dasharray='4 3' marker-end='url(#arr)'/>";
+  s+="<path d='M831 334 L831 370' stroke='"+B+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+="<text x='24' y='450' fill='"+G+"' font-size='11'>gold ↓ orders · green ↑ evidence · amber-dashed ↓ chronicle · blue ↓ state — every arrow crosses a plane boundary that a Law guards</text>";
+  s+=box(40,468,440,120,"🧭 READ IT LIKE AN ENGINEER","1 · Your click enters COMMAND.  2 · ORCHESTRATOR marshals an arm; GUARDIANS check legality; LAW CLERKS scan the 12 laws; CHRONICLERS write it down.  3 · The arm fights; evidence flows back green.  4 · DATA remembers: books, ledger, log, device stores.",G,"archview");
+  s+=box(520,468,300,120,"🔒 THE ONE LAW OF THE FILE","One index.html · zero servers · zero libraries. The architecture is data, not infrastructure — it deploys in 53 seconds.",R,"archview");
+  s+="<text x='20' y='610' fill='var(--dim)' font-size='11'>427 agents · 3 planes · 12 laws · 1 file — click any box for doctrine</text>";
+  return s+"</svg>";
+}
+
 function opsTree(){
   const G="#f0c75e", R="#f85149", GR="#3fb950", A="#d29922";
   const a = activeMission() || missions[missions.length-1] || null;
@@ -786,16 +866,20 @@ function armyBoard(){
 function vOps(){
   const chips = "<div class='chips' style='margin-bottom:10px'>"+
     "<button class='chip "+(opsView==="tree"?"armed":"")+"' onclick=\"setOpsView('tree')\">🌳 DECISION TREE</button>"+
+    "<button class='chip "+(opsView==="flow"?"armed":"")+"' onclick=\"setOpsView('flow')\">🧭 FLOWCHART</button>"+
+    "<button class='chip "+(opsView==="arch"?"armed":"")+"' onclick=\"setOpsView('arch')\">🕸️ ARCHITECTURE</button>"+
     "<button class='chip "+(opsView==="grid"?"armed":"")+"' onclick=\"setOpsView('grid')\">🧱 AGENT GRID</button>"+
     "<button class='chip "+(opsView==="comms"?"armed":"")+"' onclick=\"setOpsView('comms')\">📡 COMMUNICATIONS</button>"+
     "<button class='chip "+(opsView==="struct"?"armed":"")+"' onclick=\"setOpsView('struct')\">🏛️ STRUCTURE</button>"+
     "<button class='chip "+(opsView==="poster"?"armed":"")+"' onclick=\"setOpsView('poster')\">🖼️ POSTER</button></div>";
   const body = opsView==="tree" ? "<div class='panel'><h2>🌳 THE DECISION TREE — every branch, every refusal · pulsing = live position</h2>"+opsTree()+"</div>"
+    : opsView==="flow" ? "<div class='panel'><h2>🧭 THE FLOWCHART — order in, sealed verdict out</h2><div class='hint'>Grammar: rectangle = work · diamond = your decision · capsule = start/end · red = refusal · amber = honest skip. Every node clicks.</div>"+opsFlow()+"</div>"
+    : opsView==="arch" ? "<div class='panel'><h2>🕸️ AGENT ARCHITECTURE — three planes, one file</h2><div class='hint'>COMMAND decides · EXECUTION fights · DATA remembers. Gold ↓ orders · green ↑ evidence · dashed ↓ chronicle · blue ↓ state.</div>"+opsArch()+"</div>"
     : opsView==="grid" ? opsGrid()
     : opsView==="struct" ? opsStructure()
     : opsView==="poster" ? posterView()
     : "<div class='panel'><h2>📡 COMMUNICATIONS — the wires, taps and refusals</h2>"+opsComms()+"</div>";
-  return "<div class='panel'><h2>🗺️ OPS MAP — THE CAMPAIGN AS A PICTURE</h2><div class='hint'>Four views, zero libraries, every node clickable — the Chroniclers log your tour.</div>"+chips+"</div>"+body;
+  return "<div class='panel'><h2>🗺️ OPS MAP — THE CAMPAIGN AS A PICTURE</h2><div class='hint'>Six views, zero libraries, every node clickable — the Chroniclers log your tour.</div>"+chips+"</div>"+body;
 }
 function posterView(){
   return "<div class='panel'><h2>🖼️ POSTER — ALL THREE VIEWS, PRINT-READY</h2>"+
