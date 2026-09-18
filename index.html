@@ -587,6 +587,11 @@ const OPS_INFO = {
   order:["ORDER ARRIVES","Every order enters through one door: a click. Panels ship complete chip sets (P2); silence is never consent (P7)."],
   refused:["⛔ REFUSED","A typo is not an order. Illegal decisions are refused, ledgered (REFUSED) and blackboarded — the Decision Tree Court's critical kill (was: fell through to APPROVE)."],
   legal:["LEGAL ORDER?","The decision-tree audit: only approve / skip / abort pass. Everything else hits the REFUSED branch."],
+  orche:["🎼 ORCHESTRA","The Architect's own workflow: every order is decoded, legality-checked, reconned, fought by squads, gate-checked, shipped and chronicled — then the loop begins again."],
+  decode:["🎙️ DECODE","Hashtag/@-orders execute directly; chat+cockpit clicks both count. The Chroniclers write every decode down."],
+  certify:["🚦 CERT GATES","tests 71/71 + SELFCHECK + law audit. Red build = refused. No verdict, no ship."],
+  chronicle:["📓 CHRONICLE","ledger + commander_log + README sealed after every delivery. Memory is doctrine."],
+  closep10:["⬭ P10 CLOSE","Every session ends with exactly 3 next steps + 1:1 chips. Never a silent close."],
   flowstart:["🧭 FLOWCHART","The campaign in flowchart grammar: rectangles = work, diamonds = your decisions, red = refusal paths. One order in, one sealed verdict out."],
   archview:["🕸️ ARCHITECTURE","Three planes: COMMAND decides, EXECUTION fights, DATA remembers. Gold = orders, green = evidence, dashed = the chronicle."],
   plan:["⛔ PLAN GATE","First of 5 gates. APPROVE opens the pipeline · SKIP advances honestly (ledgered) · ABORT ends the mission (double-click, P3)."],
@@ -683,6 +688,49 @@ function opsArch(){
   s+=box(40,468,440,120,"🧭 READ IT LIKE AN ENGINEER","1 · Your click enters COMMAND.  2 · ORCHESTRATOR marshals an arm; GUARDIANS check legality; LAW CLERKS scan the 12 laws; CHRONICLERS write it down.  3 · The arm fights; evidence flows back green.  4 · DATA remembers: books, ledger, log, device stores.",G,"archview");
   s+=box(520,468,300,120,"🔒 THE ONE LAW OF THE FILE","One index.html · zero servers · zero libraries. The architecture is data, not infrastructure — it deploys in 53 seconds.",R,"archview");
   s+="<text x='20' y='610' fill='var(--dim)' font-size='11'>827 agents · 3 planes · 12 laws · 1 file — click any box for doctrine</text>";
+  return s+"</svg>";
+}
+
+function opsOrchestra(){
+  const box=(x,y,w,h,t,sub,c,key,shape)=>"<g class='army-rank' style='cursor:pointer' onclick=\"opInfo('"+key+"')\">"+
+    "<rect x='"+x+"' y='"+y+"' width='"+w+"' height='"+h+"' rx='"+(shape==="d"?24:(shape==="p"?20:10))+"' fill='var(--chip)' stroke='"+c+"' stroke-width='2'/>"+
+    "<text x='"+(x+w/2)+"' y='"+(y+h/2-(sub?6:0))+"' text-anchor='middle' fill='var(--ink)' font-size='12'>"+t+"</text>"+
+    (sub?"<text x='"+(x+w/2)+"' y='"+(y+h/2+12)+"' text-anchor='middle' fill='var(--dim)' font-size='9.5'>"+sub+"</text>":"")+"</g>";
+  const lbl=(x,y,t,c)=>"<text x='"+x+"' y='"+y+"' fill='"+c+"' font-size='10'>"+t+"</text>";
+  const v=(x,y1,y2,c)=>"<path d='M"+x+" "+y1+" L"+x+" "+y2+"' stroke='"+c+"' stroke-width='1.6' marker-end='url(#arr)'/>";
+  const G="#f0c75e",GR="#3fb950",R="#f85149",A="#d29922",B="#58a6ff";
+  let s="<svg viewBox='0 0 940 700' style='width:100%;height:auto'>"+
+    "<defs><marker id='arr' markerWidth='8' markerHeight='8' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6' fill='none' stroke='var(--dim)' stroke-width='1.4'/></marker></defs>";
+  s+=box(340,14,260,36,"⬭ 1 · ORDER IN","#order / @mention / panel click",G,"order","p");
+  s+=v(470,50,74,G);
+  s+=box(340,78,260,36,"🎙️ 2 · DECODE","hashtags execute · clicks count · logged",B,"decode");
+  s+=v(470,114,138,B);
+  s+=box(400,142,140,46,"◇ 3 · LAWFUL?","12 laws + P1–P10",G,"legal","d");
+  s+=lbl(552,160,"no →",R);
+  s+=box(600,142,240,40,"⛔ REFUSED — named, ledgered","a typo is not an order",R,"refused");
+  s+="<path d='M540 165 L600 162' stroke='"+R+"' stroke-width='1.6' marker-end='url(#arr)'/>";
+  s+=v(470,188,216,G);
+  s+=box(340,220,260,36,"🔎 4 · RECON","grep · recount · call-sites — trust grep, not ✓",B,"decode");
+  s+=v(470,256,294,B);
+  s+=box(340,298,260,36,"🗺️ 5 · PLAN","size the mission · squads chosen",B,"steps");
+  s+=v(470,334,372,G);
+  s+=box(400,376,140,46,"◇ 6 · ADVISE?","Law 9: propose vs act",G,"verdict","d");
+  s+=lbl(552,394,"only the Commander's click applies ↓",GR);
+  s+=box(600,376,240,40,"📜 PROPOSAL FILED","waits for your decision — always",A,"order");
+  s+="<path d='M540 399 L600 396' stroke='"+A+"' stroke-width='1.4' marker-end='url(#arr)'/>";
+  s+=v(470,422,448,GR);
+  s+=box(340,452,260,40,"⚔️ 7 · EXECUTE","squads fight in parallel · per-edit disk writes",GR,"run");
+  s+=v(470,492,520,GR);
+  s+=box(400,524,140,46,"◇ 8 · CERT GATES","tests · SELFCHECK · audit",G,"certify","d");
+  s+=lbl(552,540,"red →",R);
+  s+=box(600,524,240,40,"🔧 FIX LOOP","gate refuses the ship — back to 7",R,"run");
+  s+="<path d='M540 547 L600 544' stroke='"+R+"' stroke-width='1.6' marker-end='url(#arr)'/>";
+  s+="<path d='M600 544 L880 544 L880 470 L604 470' stroke='"+R+"' stroke-width='1.2' stroke-dasharray='4 3' fill='none' marker-end='url(#arr)'/>";
+  s+=v(470,570,592,GR);
+  s+=box(340,596,260,36,"🚀 9 · SHIP + VERIFY","deploy.sh — md5 polled on the live URL",GR,"done");
+  s+=v(470,632,646,B);
+  s+=box(340,650,260,36,"⬭ 10 · CHRONICLE + P10 CLOSE","records sealed · 3 next steps ship",G,"closep10","p");
+  s+="<text x='20' y='692' fill='var(--dim)' font-size='11'>the conductor never sleeps: the close feeds the next order — loops: fix (8→7) · chronicle feeds decode (10→1)</text>";
   return s+"</svg>";
 }
 
@@ -888,18 +936,20 @@ function vOps(){
     "<button class='chip "+(opsView==="tree"?"armed":"")+"' onclick=\"setOpsView('tree')\">🌳 DECISION TREE</button>"+
     "<button class='chip "+(opsView==="flow"?"armed":"")+"' onclick=\"setOpsView('flow')\">🧭 FLOWCHART</button>"+
     "<button class='chip "+(opsView==="arch"?"armed":"")+"' onclick=\"setOpsView('arch')\">🕸️ ARCHITECTURE</button>"+
+    "<button class='chip "+(opsView==="orche"?"armed":"")+"' onclick=\"setOpsView('orche')\">🎼 ORCHESTRA</button>"+
     "<button class='chip "+(opsView==="grid"?"armed":"")+"' onclick=\"setOpsView('grid')\">🧱 AGENT GRID</button>"+
     "<button class='chip "+(opsView==="comms"?"armed":"")+"' onclick=\"setOpsView('comms')\">📡 COMMUNICATIONS</button>"+
     "<button class='chip "+(opsView==="struct"?"armed":"")+"' onclick=\"setOpsView('struct')\">🏛️ STRUCTURE</button>"+
     "<button class='chip "+(opsView==="poster"?"armed":"")+"' onclick=\"setOpsView('poster')\">🖼️ POSTER</button></div>";
   const body = opsView==="tree" ? "<div class='panel'><h2>🌳 THE DECISION TREE — every branch, every refusal · pulsing = live position</h2>"+opsTree()+"</div>"
     : opsView==="flow" ? "<div class='panel'><h2>🧭 THE FLOWCHART — order in, sealed verdict out</h2><div class='hint'>Grammar: rectangle = work · diamond = your decision · capsule = start/end · red = refusal · amber = honest skip. Every node clicks.</div>"+opsFlow()+"</div>"
+    : opsView==="orche" ? "<div class='panel'><h2>🎼 THE ORCHESTRA — how the Architect works your orders</h2><div class='hint'>One order, eleven movements. ◇ = checkpoints that can refuse · dashed amber = the Chroniclers' observation bus · the loop never sleeps.</div>"+opsOrchestra()+"</div>"
     : opsView==="arch" ? "<div class='panel'><h2>🕸️ AGENT ARCHITECTURE — three planes, one file</h2><div class='hint'>COMMAND decides · EXECUTION fights · DATA remembers. Gold ↓ orders · green ↑ evidence · dashed ↓ chronicle · blue ↓ state.</div>"+opsArch()+"</div>"
     : opsView==="grid" ? opsGrid()
     : opsView==="struct" ? opsStructure()
     : opsView==="poster" ? posterView()
     : "<div class='panel'><h2>📡 COMMUNICATIONS — the wires, taps and refusals</h2>"+opsComms()+"</div>";
-  return "<div class='panel'><h2>🗺️ OPS MAP — THE CAMPAIGN AS A PICTURE</h2><div class='hint'>Six views, zero libraries, every node clickable — the Chroniclers log your tour.</div>"+chips+"</div>"+body;
+  return "<div class='panel'><h2>🗺️ OPS MAP — THE CAMPAIGN AS A PICTURE</h2><div class='hint'>Seven views, zero libraries, every node clickable — the Chroniclers log your tour.</div>"+chips+"</div>"+body;
 }
 function posterView(){
   return "<div class='panel'><h2>🖼️ POSTER — ALL THREE VIEWS, PRINT-READY</h2>"+
